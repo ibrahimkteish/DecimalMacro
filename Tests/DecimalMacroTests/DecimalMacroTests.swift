@@ -419,6 +419,28 @@ final class DecimalMacroTests: XCTestCase {
         )
     }
 
+    func testMacroFailsGivenIdentifier() {
+        // `_42` is a valid identifier. Stripping underscores must not turn it into the literal `42`.
+
+        assertMacroExpansion(
+            "#decimal(_42)",
+            expandedSource: "#decimal(_42)",
+            diagnostics: [
+                DiagnosticSpec(message: "Cannot convert '_42' to 'Decimal'", line: 1, column: 1)
+            ],
+            macros: testMacros
+        )
+
+        assertMacroExpansion(
+            "#decimal(-_1_000)",
+            expandedSource: "#decimal(-_1_000)",
+            diagnostics: [
+                DiagnosticSpec(message: "Cannot convert '-_1_000' to 'Decimal'", line: 1, column: 1)
+            ],
+            macros: testMacros
+        )
+    }
+
     func testMacroFailsGivenDoubleConstant() {
         assertMacroExpansion(
             "#decimal(Double.nan)",
