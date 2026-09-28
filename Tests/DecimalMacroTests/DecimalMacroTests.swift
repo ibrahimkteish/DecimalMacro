@@ -420,7 +420,8 @@ final class DecimalMacroTests: XCTestCase {
     }
 
     func testMacroFailsGivenIdentifier() {
-        // `_42` is a valid identifier. Stripping underscores must not turn it into the literal `42`.
+        // `_42` is a valid identifier. With `let _42: Double = 1` in scope the argument type checks, and stripping
+        // underscores must not turn it into the literal `42`. (Expansion tests skip type checking, so no `let` here.)
 
         assertMacroExpansion(
             "#decimal(_42)",
